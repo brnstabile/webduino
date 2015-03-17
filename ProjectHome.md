@@ -1,0 +1,1 @@
+Webduino é um projeto que está sendo desenvolvido como o apoio do CNPq pelo GoPEF (Grupo de Pesquisa em Ensino de Física da PUC/SP), na área de tecnologia educacional e em poucas palavras é um laboratório de controle e sensoriamento remoto baseado no uso da plataforma Arduino.
