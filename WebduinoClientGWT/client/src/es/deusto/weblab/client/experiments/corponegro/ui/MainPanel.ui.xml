@@ -17,13 +17,6 @@
 								<p1:WlWebcam ui:field="camera"/>
 							</g:DecoratorPanel>
 				</g:customCell>
-			
-			
-				<g:customCell>
-						<g:DecoratorPanel>
-							<p1:WlWebcam ui:field="camera2"/>
-						</g:DecoratorPanel>
-				</g:customCell>
 				
 			</g:row>
 		</g:Grid>

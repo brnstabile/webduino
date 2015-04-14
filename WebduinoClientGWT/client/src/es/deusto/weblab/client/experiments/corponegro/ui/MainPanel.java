@@ -49,7 +49,6 @@ public class MainPanel extends Composite {
 	@UiField WlTimer timer;
 	@UiField VerticalPanel widget;
 	@UiField(provided = true) WlWebcam camera;
-	@UiField(provided = true) WlWebcam camera2;
 	@UiField WlSwitch ControlarLampada;
 	@UiField WlStreamImage GraficoTemperatura;
 
@@ -61,7 +60,6 @@ public class MainPanel extends Composite {
 	public MainPanel() {
 		this.ControlarLampada = GWT.create(WlSwitch.class);
 		this.camera = GWT.create(WlWebcam.class);
-		this.camera2 = GWT.create(WlWebcam.class);
 		this.GraficoTemperatura = GWT.create(WlStreamImage.class);
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -71,9 +69,6 @@ public class MainPanel extends Composite {
 		return this.camera;
 	}
 	
-	public WlWebcam getWebcam2() {
-		return this.camera2;
-	}
 	
 	public WlStreamImage getGraficoTemperatura() {
 		return this.GraficoTemperatura;
