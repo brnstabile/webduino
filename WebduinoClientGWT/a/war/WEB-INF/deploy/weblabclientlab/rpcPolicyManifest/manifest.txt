@@ -1,2 +1,3 @@
 # Module weblabclientlab
 # RPC service class, partial path of RPC policy file
+com.google.gwt.logging.shared.RemoteLoggingService, E9C0A6F4F717A0426498B54C49F2EFEB.gwt.rpc

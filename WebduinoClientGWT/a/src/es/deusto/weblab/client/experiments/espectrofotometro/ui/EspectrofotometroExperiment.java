@@ -61,18 +61,12 @@ public class EspectrofotometroExperiment extends UIExperimentBase{
 		// 
 		// Configure the camera
 		final WlWebcam camera = mainPanel.getWebcam();
-		camera.setUrl("http://weblabduino.pucsp.br/webcam/era/image.jpg");
-		camera.setStreamingUrl("http://weblabduino.pucsp.br/webcam/era/video.mjpeg",320,240);
+		camera.setUrl("http://weblabduino.pucsp.br/webcam/eras/image.jpg");
+		camera.setStreamingUrl("http://weblabduino.pucsp.br/webcam/eras/video.mjpeg",320,240);
 		camera.configureWebcam(obj);
 		camera.start();
 		addDisposableWidgets(camera);
 		
-		//Grafico gerado no Xively para o sensor de luz
-		final WlWebcam graficoPNGLuz = mainPanel.getGraficoLuz();
-		graficoPNGLuz.setUrl("https://api.cosm.com/v2/feeds/107050970/datastreams/sensor_de_luz.png");
-		graficoPNGLuz.configureWebcam(obj);
-		graficoPNGLuz.start();
-		addDisposableWidgets(graficoPNGLuz);
 
 		//
 		// Configure the timer

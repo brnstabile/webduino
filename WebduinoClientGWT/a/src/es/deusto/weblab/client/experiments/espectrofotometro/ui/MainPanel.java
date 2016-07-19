@@ -39,9 +39,7 @@ public class MainPanel extends Composite {
 			.create(MainPanelUiBinder.class);
 
 	@UiField WlTimer timer;
-	@UiField VerticalPanel widget;
 	@UiField VerticalPanel main;
-	@UiField(provided = true) WlWebcam GraficoLuz;
 	@UiField(provided = true) WlWebcam camera;
 
 
@@ -51,17 +49,13 @@ public class MainPanel extends Composite {
 
 	public MainPanel() {
 		this.camera = GWT.create(WlWebcam.class);
-		this.GraficoLuz = GWT.create(WlWebcam.class);
+		this.timer = GWT.create(WlTimer.class);
 		initWidget(uiBinder.createAndBindUi(this));
 
 	}
 
 	public WlWebcam getWebcam() {
 		return this.camera;
-	}
-
-	public WlWebcam getGraficoLuz() {
-		return this.GraficoLuz;
 	}
 	
 	public WlTimer getTimer(){
