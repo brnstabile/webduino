@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Espectrofotometro</title>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="http://code.highcharts.com/modules/data.js"></script>
+        <script src="http://highcharts.github.io/export-csv/export-csv.js"></script>
+        
+<script type="text/javascript">
+
+        var c = [];
+        var d = [];
+        var options = {
+                chart: {
+                    renderTo: 'conteiner',
+                    defaultSeriesType: 'line',
+                    plotBackgroundColor: {
+                    linearGradient: { x1: 0, y1: 1, x2: 1, y2: 1 },
+                                stops: [
+                                    [0.0, 'rgba(0,0,0,0.25)'],
+                                    [0.1, 'rgba(179,15,255,0.25)'],
+                					[0.2, 'rgba(15,19,255,0.25)'],
+                					[0.3, 'rgba(15,255,47,0.25)'],
+                					[0.4, 'rgba(255,247,15,0.25)'],
+                					[0.5, 'rgba(255,159,15,0.25)'],
+                					[0.6, 'rgba(255,15,15,0.25)'],
+                					[0.85, 'rgba(0,0,0,0.25)'],
+                                ]
+                            },
+                },
+                title: {
+                    text: 'Dados do Espectrofotometro'
+                },
+                xAxis: {
+                    title: {
+                        text: 'Comprimento de onda (nm)'
+                    },
+                    categories: c
+                },
+                yAxis: {
+                    title: {
+                        text: 'Irradiância (W/m²)'
+                    }
+                },
+                series: [{
+                    name: "sensor",
+                    data: d
+                }]
+        };
+
+        var jqxhr = $.get('./data.txt', function(data) {
+            var lines = data.split('\n');
+            $.each(lines, function(lineNo, line) {
+                var items = line.split(',');
+                c.push(items[0]);
+                d.push(parseInt(items[1]));
+            })
+            var chart = new Highcharts.Chart(options);
+
+        });
+
+//data sample
+//0,100
+//50,100
+//100,50
+//150,25
+//200,22
+</script>
+
+   </head>
+   <body>
+        <div id="conteiner" style="width: 100%; height: 100%; margin: 0 auto"></div>
+   </body>
+   
+</html>
