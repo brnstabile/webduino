@@ -3,19 +3,24 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:es.deusto.weblab.client.ui.widgets" xmlns:p2="urn:import:com.google.gwt.user.cellview.client">
 
 	<ui:with field="i18n" type="es.deusto.weblab.client.i18n.IWebLabI18N" />
-
-	
+  
 	<g:VerticalPanel horizontalAlignment="ALIGN_CENTER" borderWidth="0" spacing="10" height="100%" width="100%" ui:field="main">
 
 		<g:VerticalPanel>
 			<p1:WlWebcam ui:field="camera"/>
 		</g:VerticalPanel>
 		
-		<g:VerticalPanel>
+		<g:VerticalPanel horizontalAlignment="ALIGN_CENTER" borderWidth="0" spacing="10" height="100%" width="100%">
 			<g:HTMLPanel>	    
-				<iframe src="http://weblabduino.pucsp.br/webcam/grafico/eras" height="500" width="500"></iframe> 
+				<iframe src="https://fdfgd-brnstabile.c9users.io/ControleLED.php" height="500" width="100%"></iframe> 
 		  	</g:HTMLPanel>
-		</g:VerticalPanel>		
+		</g:VerticalPanel>
+		
+		<g:VerticalPanel  horizontalAlignment="ALIGN_CENTER" borderWidth="0" spacing="10" height="100%" width="100%">
+			<g:HTMLPanel>	    
+				<iframe src="https://fdfgd-brnstabile.c9users.io/grafico.html" height="500" width="100%"></iframe> 
+		  	</g:HTMLPanel>
+		</g:VerticalPanel>
 	
 		<g:VerticalPanel>
 			<p1:WlTimer ui:field="timer" horizontalAlignment="ALIGN_CENTER"/>

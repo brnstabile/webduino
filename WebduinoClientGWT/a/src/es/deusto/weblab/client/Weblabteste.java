@@ -15,13 +15,13 @@
 package es.deusto.weblab.client;
 
 import com.google.gwt.user.client.ui.RootPanel;
-import es.deusto.weblab.client.experiments.corponegro.CorpoNegroCreatorFactory;
-import es.deusto.weblab.client.experiments.corponegro.ui.MainPanel;
+import es.deusto.weblab.client.experiments.espectrofotometro.EspectrofotometroCreatorFactory;
+import es.deusto.weblab.client.experiments.espectrofotometro.ui.MainPanel;
 
 public class Weblabteste extends WebLabClient{
 
 	MainPanel mp = new MainPanel();
-	CorpoNegroCreatorFactory ccc = new CorpoNegroCreatorFactory();
+	EspectrofotometroCreatorFactory ccc = new EspectrofotometroCreatorFactory();
 	
 	@Override
 	public void onModuleLoad() {
