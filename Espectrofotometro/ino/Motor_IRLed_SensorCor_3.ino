@@ -1,9 +1,5 @@
-//atualizado em 06/09/2016. 19:56 - Mestrado Neres - TIDD - 2014-2016//
-/* Restam apenas a questão dos numeros de poassos do motor (pois mudou-se o motor de passo para um com precisão melhor),
-  bem como aumentar a corrente do motor (fonte de bancada, se necessários).
-  Além disso falta resolver a geração dos dados de forma contínua
-  e não apenas os dados mostrados uma vez.
-  Possibilidade de uso de variaveis booleanas.*/
+//atualizado em 17/11/2016. 21:26 - Mestrado Neres - TIDD - 2014-2016//
+
 #include <Stepper.h>
 #include "Wire.h"
 #include "Adafruit_TCS34725.h"
@@ -23,10 +19,11 @@ int stepCount = 0;
 int rele = 7;
 
 //para calculos de comprimento de onda//
+float lambdaEntreFaixa;
 float lambdaVermelha; // comprimento de onda da comp Vermelha
 float lambdaVerde; // comprimento de onda da comp Verde
 float lambdaAzul; // comprimento de onda da comp Azul
-float d = 0.998 * pow(10, -6); // parametro de rede
+float d = 0.915 * pow(10, -6); // parametro de rede
 //float l = 0.1119; // dist da rede ao anteparo
 
 //Definições Sensor de Proximidade Sharp////
@@ -51,9 +48,6 @@ boolean ReceberColetaDados;
 //sensor de cores//
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS34725_GAIN_60X);
 
-
-//float ColetaCor;
-
 void setup() {
   //  ReceberColetaDados = true;
   Serial.begin(9600);
@@ -70,12 +64,8 @@ ReceberColetaDados = false;
 
 }
 
-
 void loop() {
-  ligar_motor();
-  lambda_compVermelha();
-  lambda_compVerde();
-  lambda_compAzul();
+    ligar_motor();
   delay(200);
 }
 
@@ -106,8 +96,6 @@ void ColetaFrequencia() {
       irradiance = (frequency * 0.01) / area;  // Calculate Irradiance (uW/cm2)
       pulses = 0; // reset the pulses counter
       delay (100); // wait 4 seconds until the next measurement
-
-  //    return irradiance;
     }
   }
 }
@@ -188,15 +176,11 @@ void ColetaCores() {
   Serial.print("\n");
   delay(100);
 
- // return ColetaCor;
 }
 
 void(*resetFunc)(void) = 0;
 void PararCliente() {
   delay(200);
-  //asm volatile("jmp 0");
-  //Serial.print("P");
-  delay(100);
   setup();
 
 }
@@ -206,26 +190,23 @@ void lambda_compVermelha() {
   float moveVermelho = 0.0985; //é a diferença entre a posição original e o que o motor fez a comp se mover, nesse caso, 9-0 = 9cm
   lambdaVermelha = ((d * (moveVermelho)) / sqrt(pow(sharp, 2) + pow(moveVermelho, 2))) * pow(10, 9);
   delay(100);
- return lambdaVermelha;
 }
 void lambda_compVerde() {
   ReceberColetaDados = true;
   //float ang_pas_bas = 1.8/2;
   //float passos = 13;
-  float moveVerde = 0.0755; //abs(0.0985-(sharp*(tan(passos*(ang_pas_bas))))); //é a diferença entre a posição original e o que o motor fez a comp se mover, nesse caso, 9,85 -    = 7,55cm
+  float moveVerde = 0.0745; //abs(0.0985-(sharp*(tan(passos*(ang_pas_bas))))); //é a diferença entre a posição original e o que o motor fez a comp se mover, nesse caso, 9,85 -    = 7,55cm
   lambdaVerde = ((d * (moveVerde)) / sqrt(pow(sharp, 2) + pow(moveVerde, 2))) * pow(10, 9);
   delay(100);
- return lambdaVerde;
 }
 void lambda_compAzul() {
   ReceberColetaDados = true;
   //float ang_pas_bas = 1.8/2;
   //float passos = 19;
-  float moveAzul = 0.0585; //abs(0.0985-(sharp*(tan(passos*(ang_pas_bas))))); //é a diferença entre a posição original e o que o motor fez a comp se mover, nesse caso, 9,85 -  = 5,85cm
+  float moveAzul = 0.058; //abs(0.0985-(sharp*(tan(passos*(ang_pas_bas))))); //é a diferença entre a posição original e o que o motor fez a comp se mover, nesse caso, 9,85 -  = 5,85cm
   lambdaAzul = ((d * (moveAzul)) / sqrt(pow(sharp, 2) + pow(moveAzul, 2))) * pow(10, 9);
   delay(100);
 
- return lambdaAzul;
   /*OBS: na passagem entre as comps verde e azul a referência passa a ser a comp verde.
     Contudo, frente a distancia ser 6,9, a distância a ser considerada na moveAzul
     será de 6,9-(3,2-2,1) = 5,8cm, igual.*/
@@ -259,15 +240,12 @@ void posiciona_motor_verde() {
   ColetaCores();
   delay(2000);
   myStepper.step((13)); // volta à posição original
-//  lambdaVerde++;
-//  irradiance++;
-//  ColetaCor++;
   //PararCliente();
 }
 void posiciona_motor_azul() {
   ReceberColetaDados = true;
   delay(500);
-  myStepper.step(-(19)); // para leitura da comp azul (a partir da con inicial)
+  myStepper.step(-(18)); // para leitura da comp azul (a partir da con inicial)
   lambda_compAzul();
   ColetaFrequencia();
   Serial.print(lambdaAzul, 2);
@@ -276,14 +254,14 @@ void posiciona_motor_azul() {
   Serial.print(",");
   ColetaCores();
   delay(2000);
-  myStepper.step((19)); // volta à posição original
+  myStepper.step((18)); // volta à posição original
   //PararCliente();
 }
 void posiciona_motor_branco() {
   ReceberColetaDados = true;
-  //vermelho
+  //branco
   delay(500);
-  myStepper.step(0);
+  myStepper.step(-(18));
   lambda_compVermelha();
   ColetaFrequencia();
   Serial.print(lambdaVermelha, 2);
@@ -291,10 +269,6 @@ void posiciona_motor_branco() {
   Serial.print(irradiance, 2);
   Serial.print(",");
   ColetaCores();
-  delay(2000);//para leitura da comp vermelha
-  //verde
-  delay(500);
-  myStepper.step(-(13)); // para leitura da comp verde - considerando a partir da comp vermelha.
   lambda_compVerde();
   ColetaFrequencia();
   Serial.print(lambdaVerde, 2);
@@ -302,10 +276,6 @@ void posiciona_motor_branco() {
   Serial.print(irradiance, 2);
   Serial.print(",");
   ColetaCores();
-  delay(2000);
-  //azul
-  delay(500);
-  myStepper.step(-(6)); // para leitura da comp azul - considerando a partir da comp verde.
   lambda_compAzul();
   ColetaFrequencia();
   Serial.print(lambdaAzul, 2);
@@ -314,15 +284,15 @@ void posiciona_motor_branco() {
   Serial.print(",");
   ColetaCores();
   delay(2000);
-  myStepper.step((19)); // volta à posição original
+  myStepper.step((18)); // volta à posição original
   //PararCliente();
 }
 
 void posiciona_motor_comb1() { //comb1 = vermelho + verde
   ReceberColetaDados = true;
-  //vermelha
+  //vermelha e verde
   delay(500);
-  myStepper.step(0);
+  myStepper.step(-(13));
   lambda_compVermelha();
   ColetaFrequencia();
   Serial.print(lambdaVermelha, 2);
@@ -330,10 +300,6 @@ void posiciona_motor_comb1() { //comb1 = vermelho + verde
   Serial.print(irradiance, 2);
   Serial.print(",");
   ColetaCores();
-  delay(2000);//para leitura da comp vermelha
-  //verde
-  delay(500);
-  myStepper.step(-(13)); // para leitura da comp verde - considerando a partir da comp vermelha.
   lambda_compVerde();
   ColetaFrequencia();
   Serial.print(lambdaVerde, 2);
@@ -360,7 +326,7 @@ void posiciona_motor_comb2() { // comb2 = verde + azul
   delay(2000);
   //azul
   delay(500);
-  myStepper.step(-(6)); // para leitura da comp azul - considerando a partir da comp verde.
+  myStepper.step(-(5)); // para leitura da comp azul - considerando a partir da comp verde.
   lambda_compAzul();
   ColetaFrequencia();
   Serial.print(lambdaAzul, 2);
@@ -369,7 +335,7 @@ void posiciona_motor_comb2() { // comb2 = verde + azul
   Serial.print(",");
   ColetaCores();
   delay(2000);
-  myStepper.step(19); // volta à posição original
+  myStepper.step(18); // volta à posição original
   //PararCliente();
 }
 
@@ -391,7 +357,7 @@ void posiciona_motor_comb3() { // comb3 = vermelho + azul
   stepCount++;
   lambda_compAzul();
   ColetaFrequencia();
-  myStepper.step(-(19)); // para leitura da comp azul - considerando a partir da comp verde.
+  myStepper.step(-(18)); // para leitura da comp azul - considerando a partir da comp verde.
   Serial.print(lambdaAzul, 2);
   Serial.print(",");
   Serial.print(irradiance, 2);
@@ -409,7 +375,10 @@ void ligar_motor() {
     char tecla = Serial.read();
 
     if (tecla == '1') {
-      for (int i = 0; i < 1; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFFA05F, 32); // Sony TV power code
         delay(200);
       }
@@ -417,7 +386,10 @@ void ligar_motor() {
       //Serial.println ("Aumenta Brilho");
     }
     if (tecla == '0') {
-      for (int i = 0; i < 1; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFF20DF, 32); // Sony TV power code
         delay(200);
       }
@@ -425,7 +397,10 @@ void ligar_motor() {
       //Serial.println ("Diminui Brilho");
     }
     if (tecla == 'D') {
-      for (int i = 0; i < 1; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFF609F, 32); // Sony TV power code
         delay(400);
         //Serial.println("P");
@@ -438,19 +413,26 @@ void ligar_motor() {
     }
     if (tecla == 'L') {
       Serial.println("I");
-      for (int i = 0; i < 1; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFFE01F, 32); // Sony TV power code
+        ReceberColetaDados = false;
         //Serial.println ("L");
         delay(400);
       }
       digitalWrite(rele, HIGH); //Aciona o rele
-      delay(2000); //Aguarda 5 segundos
-      delay(500);
+      delay(1000); //Aguarda 5 segundos
+      delay(200);
       //Serial.println ("Dispositivo pronto para coletar dados!");
     }
     if (tecla == 'R') {
       Serial.println("I");
-      for (int i = 0; i < 3; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFF906F, 32); // Sony TV power code
         delay(400);
         //Serial.println ("Vermelho");
@@ -465,7 +447,6 @@ void ligar_motor() {
         i++;
         //ReceberColetaDados = false;
         irsend.sendNEC(0xFF10EF, 32); // Sony TV power code
-        stepCount++;
         delay(400);
         //        Serial.println ("Verde");
         posiciona_motor_verde();
@@ -473,8 +454,11 @@ void ligar_motor() {
       delay(30);
     }
     if (tecla == 'B') {
-      Serial.println("I");
-      for (int i = 0; i < 3; i++) {
+     Serial.println("I");
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFF50AF, 32); // Sony TV power code
         delay(400);
         //        Serial.println ("Azul");
@@ -495,7 +479,10 @@ void ligar_motor() {
     }
     if (tecla == 'o') {
       Serial.println("I");
-      for (int i = 0; i < 4; i++) {
+      int i = 0;
+      while ((i <= 2)){
+        i++;
+        //ReceberColetaDados = false;
         irsend.sendNEC(0xFFB04F, 32); // Sony TV power code
         delay(400);
         //    Serial.println ("Laranja");
@@ -505,7 +492,7 @@ void ligar_motor() {
     }
     if (tecla == 'g') {
       Serial.println("I");
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         irsend.sendNEC(0xFF30CF, 32); // Sony TV power code
         delay(400);
         //  Serial.println ("Verde Claro");
@@ -515,7 +502,7 @@ void ligar_motor() {
     }
     if (tecla == 'b') {
       Serial.println("I");
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         irsend.sendNEC(0xFF708F, 32); // Sony TV power code
         delay(400);
         //Serial.println ("Violeta Claro");
