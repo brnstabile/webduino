@@ -12,13 +12,13 @@
 		
 		<g:VerticalPanel horizontalAlignment="ALIGN_CENTER" borderWidth="0" spacing="10" height="100%" width="100%">
 			<g:HTMLPanel>	    
-				<iframe src="https://fdfgd-brnstabile.c9users.io/ControleLED.php" height="500" width="100%"></iframe> 
+				<iframe src="http://weblabduino.pucsp.br/era/ControleLED.php" height="500" width="100%"></iframe> 
 		  	</g:HTMLPanel>
 		</g:VerticalPanel>
 		
 		<g:VerticalPanel  horizontalAlignment="ALIGN_CENTER" borderWidth="0" spacing="10" height="100%" width="100%">
 			<g:HTMLPanel>	    
-				<iframe src="https://fdfgd-brnstabile.c9users.io/grafico.html" height="500" width="100%"></iframe> 
+				<iframe src="http://weblabduino.pucsp.br/era/grafico.html" height="500" width="100%"></iframe> 
 		  	</g:HTMLPanel>
 		</g:VerticalPanel>
 	
